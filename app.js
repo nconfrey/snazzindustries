@@ -25,7 +25,7 @@ const upload = multer({ dest: path.join(__dirname, 'uploads') });
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.load({ path: '.env.example' });
+dotenv.load({ path: 'keys.env' });
 
 /**
  * Controllers (route handlers).
@@ -225,7 +225,8 @@ app.use(errorHandler());
  * Start Express server.
  */
 app.listen(app.get('port'), () => {
-  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env')); 
+  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+
   console.log('  Press CTRL-C to stop\n');
 });
 
