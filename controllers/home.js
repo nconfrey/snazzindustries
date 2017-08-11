@@ -17,7 +17,7 @@ const set_nums = [
 function getPrice(asin, callback) {
     amazon_client.itemLookup({
         itemId: asin,
-        responseGroup: 'OfferSummary'
+        responseGroup: 'OfferSummary, Images'
     }, function (err, results, response) {
         if (err) {
             console.log('ERRRORORR:' + err.message);
@@ -25,12 +25,13 @@ function getPrice(asin, callback) {
         } else {
             console.log(JSON.stringify(results, null, 2));
             var ret_json = JSON.parse(JSON.stringify(results, null, 2));
-            console.log(ret_json);
+            //console.log(ret_json);
             parsed_results = {
                 ASIN: ret_json[0].ASIN[0],
-                NewPrice: ret_json[0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0]
+                NewPrice: ret_json[0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
+                Image: ret_json[0].SmallImage[0].URL[0]
             };
-            console.log(parsed_results);
+            //console.log(parsed_results);
             callback(null, parsed_results);
         }
     });
