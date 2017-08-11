@@ -27,6 +27,7 @@ function getPrice(asin, callback) {
             var ret_json = JSON.parse(JSON.stringify(results, null, 2));
             console.log(ret_json);
             parsed_results = {
+                ASIN: ret_json[0].ASIN[0],
                 NewPrice: ret_json[0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0]
             };
             console.log(parsed_results);
@@ -66,7 +67,7 @@ exports.index = (req, res) => {
         res.render('home', {
             title: 'Nick is Awesome',
             error: err,
-            data: JSON.stringify(results, null, 2)
+            data: results
         });
     })
 };

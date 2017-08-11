@@ -6,9 +6,8 @@ block content
   hr
   .row
     .col-sm-6
-    h2 data.first
-    //img.image(src= "http://" + data.first.LargeImage.URL, alt="Image Title")
-    p This is currently priced at !{data[0].NewPrice}
-    p !{data}
+    h2=data[0]['ASIN']
+    p='This is currently priced at ' + data[0].NewPrice
+    p !{data[0]}
     p
       a.btn.btn-default(href='#', role='button') View details »
