@@ -5,10 +5,11 @@ block content
   p.lead A boilerplate for Node.js web applications.
   hr
   .row
-    .col-sm-6
-    h2=data[0].ASIN
-    img.image(src=data[0].Image, alt="Something is fucked")
-    p='This is currently priced at ' + data[0].NewPrice
-    p !{data}
-    p
-      a.btn.btn-default(href='#', role='button') View details »
+    each set in data
+      .col-sm-6
+      h4=set.ASIN
+      img.image(src=set.Image, alt="Something is fucked")
+      p='Price Now: ' + set.NewPrice
+      p !{data}
+      p
+        a.btn.btn-default(href='#', role='button') View details »

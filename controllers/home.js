@@ -29,7 +29,7 @@ function getPrice(asin, callback) {
             parsed_results = {
                 ASIN: ret_json[0].ASIN[0],
                 NewPrice: ret_json[0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
-                Image: ret_json[0].SmallImage[0].URL[0]
+                Image: ret_json[0].MediumImage[0].URL[0]
             };
             //console.log(parsed_results);
             callback(null, parsed_results);
@@ -58,11 +58,16 @@ for (set in set_nums) {
  * Home page.
  */
 exports.index = (req, res) => {
-    async.parallel([
+    async.parallel(
+        set_nums.map((num) => { return (callback) => { getPrice(num, callback) }}),
+        /*
+        [
         function (callback) {
             getPrice(set_nums[0], callback);
         }
-    ], function (err, results) {
+    ], 
+    */
+    function (err, results) {
         console.log(JSON.stringify(results, null, 2));
 
         res.render('home', {
