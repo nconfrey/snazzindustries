@@ -23,13 +23,16 @@ function getPrice(asin, callback) {
             console.log('ERRRORORR:' + err.message);
             callback(err, null);
         } else {
-            console.log(JSON.stringify(results, null, 2));
+            //console.log(JSON.stringify(results, null, 2));
             var ret_json = JSON.parse(JSON.stringify(results, null, 2));
             //console.log(ret_json);
             var newPrice = ret_json[0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0];
+            var newPriceRaw = ret_json[0].OfferSummary[0].LowestNewPrice[0].Amount[0]; //integer price
             var originPrice = "1";
+            var originPriceRaw = "1";
             try {
                 originPrice = ret_json[0].ItemAttributes[0].ListPrice[0].FormattedPrice[0];
+                originPriceRaw = ret_json[0].ItemAttributes[0].ListPrice[0].Amount[0];
             }
             catch (err) {
                 //TODO: Eventually have a backup lookup here when Amazon doesn't have the data
@@ -39,10 +42,11 @@ function getPrice(asin, callback) {
                 ASIN: ret_json[0].ASIN[0],
                 URL: ret_json[0].DetailPageURL[0],
                 NewPrice: newPrice,
+                NewPriceRaw: newPriceRaw,
                 Image: ret_json[0].MediumImage[0].URL[0],
                 OriginPrice:originPrice,
-                Profit: parseFloat(newPrice) - parseFloat(originPrice),
-                ROI: parseFloat(originPrice) / parseFloat(newPrice)
+                Profit: (parseInt(newPriceRaw) / 100.0) - (parseInt(originPriceRaw) / 100.0),
+                ROI: (parseInt(newPriceRaw) / 100.0) / (parseInt(originPriceRaw) / 100.0)
             };
             //console.log(parsed_results);
             callback(null, parsed_results);
@@ -56,9 +60,11 @@ function getPrice(asin, callback) {
  */
 exports.index = (req, res) => {
     async.parallel(
+        //this magic makes an array of curried getPrice functions that all already have the callback
         set_nums.map((num) => { return (callback) => { getPrice(num, callback) }}),
     function (err, results) {
-        console.log(JSON.stringify(results, null, 2));
+        //console.log(JSON.stringify(results, null, 2));
+        console.log(parseFloat(results.newPrice));
 
         res.render('home', {
             title: 'Nick is Awesome',

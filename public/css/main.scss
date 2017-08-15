@@ -3,7 +3,7 @@
 @import "lib/bootstrap/bootstrap";
 @import "lib/font-awesome/font-awesome";
 
-@import "themes/default/default";
+@import "themes/modern/modern";
 
 // Scaffolding
 // -------------------------
@@ -14,8 +14,17 @@ html {
 }
 
 body {
-  padding-top: 60px;
-  margin-bottom: 75px;
+    color: #333;
+    background: #F5F5F5 url(themes/bgd.gif) repeat-y scroll 50% 0;
+    background-size: 100% 100%;
+    font: 62.5% Georgia, "Times New Roman", Times, serif;
+    text-align: center;
+}
+
+container {
+  width: 1000px;
+  margin: 0 auto;
+  padding-top: 30px;
 }
 
 footer {
