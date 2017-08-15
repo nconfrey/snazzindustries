@@ -17,7 +17,7 @@ const set_nums = [
 function getPrice(asin, callback) {
     amazon_client.itemLookup({
         itemId: asin,
-        responseGroup: 'OfferSummary, Images'
+        responseGroup: 'ItemAttributes, OfferSummary, Images'
     }, function (err, results, response) {
         if (err) {
             console.log('ERRRORORR:' + err.message);
@@ -26,32 +26,29 @@ function getPrice(asin, callback) {
             console.log(JSON.stringify(results, null, 2));
             var ret_json = JSON.parse(JSON.stringify(results, null, 2));
             //console.log(ret_json);
+            var newPrice = ret_json[0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0];
+            var originPrice = "1";
+            try {
+                originPrice = ret_json[0].ItemAttributes[0].ListPrice[0].FormattedPrice[0];
+            }
+            catch (err) {
+                //TODO: Eventually have a backup lookup here when Amazon doesn't have the data
+                originPrice = "1";
+            }
             parsed_results = {
                 ASIN: ret_json[0].ASIN[0],
-                NewPrice: ret_json[0].OfferSummary[0].LowestNewPrice[0].FormattedPrice[0],
-                Image: ret_json[0].MediumImage[0].URL[0]
+                URL: ret_json[0].DetailPageURL[0],
+                NewPrice: newPrice,
+                Image: ret_json[0].MediumImage[0].URL[0],
+                OriginPrice:originPrice,
+                Profit: parseFloat(newPrice) - parseFloat(originPrice),
+                ROI: parseFloat(originPrice) / parseFloat(newPrice)
             };
             //console.log(parsed_results);
             callback(null, parsed_results);
         }
     });
 }
-
-/*
-var result = getPrice(set_nums[0]);
-console.log(JSON.stringify(result, null, 2));
-
-var investment_data = [];
-for (set in set_nums) {
-    var result = getPrice(set);
-    if (result == null)
-        continue;
-    else {
-        investment_data.push(result);
-        console.log(JSON.stringify(result, null, 2));
-    }
-}
-*/
 
 /**
  * GET /
@@ -60,13 +57,6 @@ for (set in set_nums) {
 exports.index = (req, res) => {
     async.parallel(
         set_nums.map((num) => { return (callback) => { getPrice(num, callback) }}),
-        /*
-        [
-        function (callback) {
-            getPrice(set_nums[0], callback);
-        }
-    ], 
-    */
     function (err, results) {
         console.log(JSON.stringify(results, null, 2));
 
