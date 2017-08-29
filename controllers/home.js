@@ -6,6 +6,13 @@ var amazon_client = amazon.createClient({
     awsTag: process.env.AWS_TAG
 });
 
+// init with element 
+var grid = document.querySelector('.grid');
+var msnry = new Masonry(grid, {
+    itemSelector: '.grid-item',
+    columnWidth: 200
+});
+
 const set_nums = [
     "B000OTF4CQ", //cafe corner
     "B001345RSW", //market street
@@ -46,7 +53,7 @@ function getPrice(asin, callback) {
                 Image: ret_json[0].MediumImage[0].URL[0],
                 OriginPrice:originPrice,
                 Profit: (parseInt(newPriceRaw) / 100.0) - (parseInt(originPriceRaw) / 100.0),
-                ROI: (parseInt(newPriceRaw) / 100.0) / (parseInt(originPriceRaw) / 100.0)
+                ROI: Math.round((parseInt(newPriceRaw) / 100.0) / (parseInt(originPriceRaw) / 100.0))
             };
             //console.log(parsed_results);
             callback(null, parsed_results);

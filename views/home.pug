@@ -1,10 +1,28 @@
 extends layout
-
+  
 block content
-  .blargle
-    h1 !{title}
-    p.lead A boilerplate for Node.js web applications.
-  hr
+  .script(src="/js/masonry.pkdg.min")
+  .container
+    .jumbotron
+      .col-xs-4
+        img.image(src="/assets/storm2.jpg", alt="Something is fucked", height=200)
+      .col-xs-4
+        img.image(src="/assets/logo.PNG", alt="Snazz Industries")
+        p.lead Lego Arbitrage and Lego Reselling: How to make money with Lego
+      .col-xs-4
+        img.image(src="/assets/clones1.jpg", alt="Something is fucked", height=200)
+  hr.header-line-thick
+
+  div.grid
+    div.grid-item
+    div.grid-item
+    div.grid-item
+    div.grid-item
+    div.grid-item
+    div.grid-item
+    div(class="grid-item grid-item--width2")
+    div(class="grid-item grid-item--height2")
+
   .row
     each set in data
       .col-sm-6
