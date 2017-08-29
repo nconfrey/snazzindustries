@@ -14,25 +14,16 @@ block content
   hr.header-line-thick
 
   div.grid
-    div.grid-item
-    div.grid-item
-    div.grid-item
-    div.grid-item
-    div.grid-item
-    div.grid-item
-    div(class="grid-item grid-item--width2")
-    div(class="grid-item grid-item--height2")
-
-  .row
+    div(class="grid-item grid-item--sidebar")
     each set in data
-      .col-sm-6
-      h4=set.ASIN
-      a(href=set.URL) 
-        img.image(src=set.Image, alt="Something is fucked")
-      a(href=set.URL) 
-        p= ('Price Now: ' + set.NewPrice)
-      p='Price Originally: ' + set.OriginPrice
-      p='Profit: $' + set.Profit
-      p='Return on Investment: ' + set.ROI + '%' 
-      p
-        a.btn.btn-default(href='#', role='button') View details »
+      div(class="grid-item grid-item--story")
+        h4=set.ASIN
+        a(href=set.URL) 
+          img.image(src=set.Image, alt="Something is fucked")
+        a(href=set.URL) 
+          p= ('Price Now: ' + set.NewPrice)
+        p='Price Originally: ' + set.OriginPrice
+        p='Profit: $' + set.Profit
+        p='Return on Investment: ' + set.ROI + '%' 
+        p
+          a.btn.btn-default(href='#', role='button') View details »

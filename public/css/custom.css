@@ -61,7 +61,6 @@ stylize any heading tags withing white-panel below
 .grid-item {
   width: 160px;
   height: 120px;
-  float: left;
   background: #D26;
   border: 2px solid #333;
   border-color: hsla(0, 0%, 0%, 0.5);
@@ -72,6 +71,15 @@ stylize any heading tags withing white-panel below
 .grid-item--width3 { width: 480px; }
 .grid-item--width4 { width: 640px; }
 
-.grid-item--height2 { height: 200px; }
+.grid-item--sidebar { 
+  height: 500px;
+  width:  25%;
+  float: right; 
+}
+.grid-item--story {
+  height: 500px;
+  width: 75%;
+  margin-bottom: 10px;
+}
 .grid-item--height3 { height: 260px; }
 .grid-item--height4 { height: 360px; }

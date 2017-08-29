@@ -6,13 +6,6 @@ var amazon_client = amazon.createClient({
     awsTag: process.env.AWS_TAG
 });
 
-// init with element 
-var grid = document.querySelector('.grid');
-var msnry = new Masonry(grid, {
-    itemSelector: '.grid-item',
-    columnWidth: 200
-});
-
 const set_nums = [
     "B000OTF4CQ", //cafe corner
     "B001345RSW", //market street
