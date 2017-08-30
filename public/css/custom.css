@@ -1,9 +1,18 @@
-body {
-    color: #333;
-    background: #F5F5F5 url(themes/bgd.gif) repeat-y scroll 50% 0;
-    background-size: contain;
-    text-align: center;
+
+/* Keeps the gray page look on desktop only */
+@media only screen and (min-width: 768px) {
+  body {
+      color: #333;
+      background: #F5F5F5 url(themes/bgd.gif) repeat-y scroll 50% 0;
+      background-size: contain;
+      text-align: center;
+  }
 }
+
+body {
+      color: #333;
+      text-align: center;
+  }
 
 #pinBoot {
   position: relative;

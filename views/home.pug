@@ -2,19 +2,14 @@ extends layout
   
 block content
   .script(src="/js/masonry.pkdg.min")
-  .container
-    .jumbotron
-      .col-xs-4
-        img.image(src="/assets/storm2.jpg", alt="Something is fucked", height=200)
-      .col-xs-4
-        img.image(src="/assets/logo.PNG", alt="Snazz Industries")
-        p.lead Lego Arbitrage and Lego Reselling: How to make money with Lego
-      .col-xs-4
-        img.image(src="/assets/clones1.jpg", alt="Something is fucked", height=200)
+  .blargle
+    img.image(src="/assets/logo.PNG", alt="Snazz Industries")
+    p.lead Lego Arbitrage and Lego Reselling: How to make money with Lego
   hr.header-line-thick
 
   div.grid
     div(class="grid-item grid-item--sidebar")
+      img.image(src="/assets/logo.PNG", alt="Snazz Industries")
     each set in data
       div(class="grid-item grid-item--story")
         h4=set.ASIN
