@@ -1,0 +1,26 @@
+mixin article(post)
+	article(data-ks-editable=editable(user, { list: 'Post', id: post.id })).media
+		.media-center
+			a(href='/blog/post/' + post.key)
+				if post.image.exists
+					img(src=post._.image.fit(80,80)).media-object
+				else
+					img(src="http://placehold.it/80x80").media-object
+		.media-body
+			h3.media-heading
+				a(href='/blog/post/' + post.key)= post.name
+			if post.publishedDate || post.author
+				p.text-muted.text-small Posted 
+					if post.publishedDate
+						| on 
+						time(datetime=post.publishedDate)=post._.publishedDate.format('MMMM Do, YYYY')
+					if post.categories && post.categories.length
+						|  in 
+						each cat, cat_i in post.categories
+							a(href='/blog/' + cat.key)= cat.name
+							if cat_i < post.categories.length - 1
+								| , 
+							else
+								|
+			!= post.content.full
+	hr

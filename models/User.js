@@ -1,70 +1,61 @@
-const bcrypt = require('bcrypt-nodejs');
-const crypto = require('crypto');
-const mongoose = require('mongoose');
+var keystone = require('keystone');
+var Types = keystone.Field.Types;
 
-const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true },
-  password: String,
-  passwordResetToken: String,
-  passwordResetExpires: Date,
+var User = new keystone.List('User', {
+	// nodelete prevents people deleting the demo admin user
+	nodelete: true,
+});
 
-  facebook: String,
-  twitter: String,
-  google: String,
-  github: String,
-  instagram: String,
-  linkedin: String,
-  steam: String,
-  tokens: Array,
+User.add({
+	name: { type: Types.Name, required: true, index: true },
+	email: { type: Types.Email, initial: true, required: true, index: true, unique: true },
+	phone: { type: String, width: 'short' },
+	photo: { type: Types.CloudinaryImage, collapse: true },
+	password: { type: Types.Password, initial: true, required: false },
+}, 'Permissions', {
+	isProtected: { type: Boolean, noedit: true },
+});
 
-  profile: {
-    name: String,
-    gender: String,
-    location: String,
-    website: String,
-    picture: String
-  }
-}, { timestamps: true });
+// Provide access to Keystone
+User.schema.virtual('canAccessKeystone').get(function () {
+	return true;
+});
+
+User.relationship({ ref: 'Post', path: 'posts', refPath: 'author' });
+
+User.schema.methods.wasActive = function () {
+	this.lastActiveOn = new Date();
+	return this;
+}
 
 /**
- * Password hash middleware.
+ * DEMO USER PROTECTION
+ * The following code prevents anyone updating the default admin user
+ * and breaking access to the demo
  */
-userSchema.pre('save', function save(next) {
-  const user = this;
-  if (!user.isModified('password')) { return next(); }
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) { return next(err); }
-    bcrypt.hash(user.password, salt, null, (err, hash) => {
-      if (err) { return next(err); }
-      user.password = hash;
-      next();
-    });
-  });
+
+function protect (path) {
+	User.schema.path(path).set(function (value) {
+		return (this.isProtected && this.get(path)) ? this.get(path) : value;
+	});
+}
+
+['name.first', 'name.last', 'email', 'isProtected'].forEach(protect);
+
+User.schema.path('password').set(function (newValue) {
+	// the setter for the password field is more complicated because it has to
+	// emulate the setter on the password type, and ensure hashing before save
+	// also, we can't currently escape the hash->set loop, so the hash is harcoded
+	// for the demo user for now.
+	if (this.isProtected) return '$2a$10$fMeQ6uNsJhJZnY/6soWfc.Mq8T3MwANJK52LQCK2jzw/NjE.JBHV2';
+	this.__password_needs_hashing = true;
+	return newValue;
 });
 
 /**
- * Helper method for validating user's password.
+ * END DEMO USER PROTECTION
  */
-userSchema.methods.comparePassword = function comparePassword(candidatePassword, cb) {
-  bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
-    cb(err, isMatch);
-  });
-};
 
-/**
- * Helper method for getting user's gravatar.
- */
-userSchema.methods.gravatar = function gravatar(size) {
-  if (!size) {
-    size = 200;
-  }
-  if (!this.email) {
-    return `https://gravatar.com/avatar/?s=${size}&d=retro`;
-  }
-  const md5 = crypto.createHash('md5').update(this.email).digest('hex');
-  return `https://gravatar.com/avatar/${md5}?s=${size}&d=retro`;
-};
-
-const User = mongoose.model('User', userSchema);
-
-module.exports = User;
+User.track = true;
+User.defaultColumns = 'name, email, phone, photo';
+User.register();
