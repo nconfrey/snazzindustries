@@ -37,9 +37,9 @@ block content
 						hr
 						!= post.content.full
 					//-comments
-					div
-						+comment-form()
+					div(id="comments")
 						+comment-thread(comments)
+						+comment-form()
 
 
 block page-js
@@ -49,20 +49,18 @@ block page-js
 			var comments = $('#comments');
 			var input = $('.comment-field-input');
 			var submit = comments.find('button[type=submit]');
-
 			
 			// Scroll to comments and focus input field
 			function scrollToComments(e) {
 				
 				e.preventDefault();
 				
-				$('html, body').animate({ scrollTop: comments.offset().top }, 250);
+				$('html, body').animate({ scrollTop: $("#comments").offset().top }, 250);
 				
 				input.eq(0).focus();
+				alert("Did it!");
 			}
 			$('[href="#comments"]').click( scrollToComments );
-			
-			
 			
 			// Check if field has content: enable/disable submit. Disable by default
 			submit.attr('disabled','disabled');

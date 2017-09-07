@@ -1,9 +1,13 @@
+include ../mixins/commenting
+
 mixin article(post)
+	.script
+
 	article(data-ks-editable=editable(user, { list: 'Post', id: post.id })).media
 		.media-center
 			a(href='/blog/post/' + post.key)
 				if post.image.exists
-					img(src=post._.image.fit(80,80)).media-object
+					img(src=post._.image.fit(200,200)).media-object
 				else
 					img(src="http://placehold.it/80x80").media-object
 		.media-body
@@ -23,4 +27,6 @@ mixin article(post)
 							else
 								|
 			!= post.content.full
+			p.text-muted.text-small 
+				a(href='/blog/post/' + post.key + "#comments") Comments | Write Comment
 	hr
