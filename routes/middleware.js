@@ -23,7 +23,7 @@ exports.theme = function (req, res, next) {
 		'United',
 		'Yeti',
 	];
-	res.locals.currentTheme = req.session.theme || 'Bootstrap';
+	res.locals.currentTheme = 'Paper';
 	next();
 };
 

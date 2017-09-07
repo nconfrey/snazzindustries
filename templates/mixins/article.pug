@@ -5,14 +5,14 @@ mixin article(post)
 
 	article(data-ks-editable=editable(user, { list: 'Post', id: post.id })).media
 		.media-center
-			a(href='/blog/post/' + post.key)
-				if post.image.exists
-					img(src=post._.image.fit(200,200)).media-object
-				else
-					img(src="http://placehold.it/80x80").media-object
-		.media-body
 			h3.media-heading
 				a(href='/blog/post/' + post.key)= post.name
+			a(href='/blog/post/' + post.key)
+				if post.image.exists
+					img(src=post._.image.fit(500,auto)).centerImg
+				else
+					img(src="http://placehold.it/80x80").centerImg
+		.media-body(style="padding-top:10px;")
 			if post.publishedDate || post.author
 				p.text-muted.text-small Posted 
 					if post.publishedDate
