@@ -70,6 +70,8 @@ exports = module.exports = function (req, res) {
     locals.posts = [];
     locals.categories = [];
 
+    locals.moment = require('moment');
+
     // Load all categories
     view.on('init', function (next) {
 
